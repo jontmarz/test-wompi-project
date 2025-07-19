@@ -1,0 +1,5 @@
+environment = "dev"
+db_password = "your_dev_password"
+wompi_public_key = "pub_test_xxxxx"
+wompi_private_key = "prv_test_xxxxx"
+wompi_integrity_key = "test_integrity_xxxxx"

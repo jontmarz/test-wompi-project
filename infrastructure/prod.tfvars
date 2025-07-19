@@ -1,0 +1,5 @@
+environment = "prod"
+db_password = "your_prod_password"
+wompi_public_key = "pub_prod_xxxxx"
+wompi_private_key = "prv_prod_xxxxx"
+wompi_integrity_key = "prod_integrity_xxxxx"
