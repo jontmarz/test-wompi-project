@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useAppSelector, useAppDispatch } from '../hooks/redux'
 import { createTransaction } from '../store/slices/paymentSlice'
 import { clearCart } from '../store/slices/cartSlice'
+import handleDataSubmitWompi from '../utils/handleDataSubmitWompi'
 
 const OrderSummary: React.FC = () => {
   const navigate = useNavigate()
@@ -18,11 +19,23 @@ const OrderSummary: React.FC = () => {
     }
 
     try {
-      await dispatch(createTransaction(paymentData))
-      dispatch(clearCart())
-      navigate('/status')
+      console.log('Iniciando proceso de pago...')
+      console.log('Items del carrito:', items)
+      console.log('Datos de pago:', paymentData)
+      console.log('Total:', total)
+      
+      // Procesar pago con Wompi
+      const reference = await handleDataSubmitWompi(items, paymentData, total)
+      console.log('Pago iniciado con referencia:', reference)
+      
+      // El widget de Wompi manejará la navegación automáticamente
+      // No necesitamos limpiar el carrito aquí porque lo haremos después de confirmar el pago
+      
     } catch (error) {
-      console.error('Error creating transaction:', error)
+      console.error('Error completo:', error)
+      console.error('Mensaje del error:', error.message)
+      console.error('Stack trace:', error.stack)
+      alert(`Error al procesar el pago: ${error.message}`)
     }
   }
 
@@ -43,7 +56,7 @@ const OrderSummary: React.FC = () => {
   }
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="w-full max-w-full md:max-w-2xl md:w-1/2 mx-auto p-4 space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Resumen de Compra</h2>
         <p className="text-gray-600">Revisa tu pedido antes de confirmar</p>

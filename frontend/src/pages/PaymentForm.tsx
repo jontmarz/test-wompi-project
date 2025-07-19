@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { motion } from 'framer-motion'
-import { CreditCard, User, Truck } from 'lucide-react'
+import { CreditCardIcon, UserIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { useAppDispatch } from '../hooks/redux'
 import { setPaymentData } from '../store/slices/paymentSlice'
 import { validateCard, formatCardNumber, formatExpiryDate } from '../utils/cardValidation'
@@ -81,16 +81,28 @@ const PaymentForm: React.FC = () => {
   const getCardLogo = () => {
     switch (cardValidation.cardType) {
       case 'visa':
-        return '💳 VISA'
+      return (
+        <img
+        src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
+        alt="Visa"
+        className="h-5"
+        />
+      )
       case 'mastercard':
-        return '💳 MasterCard'
+      return (
+        <img
+        src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+        alt="Mastercard"
+        className="h-5"
+        />
+      )
       default:
-        return '💳'
+      return '💳'
     }
   }
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="w-full max-w-full md:max-w-2xl md:w-1/2 mx-auto p-4 space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Datos de Pago</h2>
         <p className="text-gray-600">Ingresa tu información de pago y envío</p>
@@ -104,7 +116,7 @@ const PaymentForm: React.FC = () => {
           className="card"
         >
           <div className="flex items-center space-x-2 mb-4">
-            <CreditCard size={20} className="text-primary-600" />
+            <CreditCardIcon className="w-5 h-5 text-primary-600" />
             <h3 className="text-lg font-semibold">Datos de Tarjeta</h3>
           </div>
 
@@ -176,7 +188,7 @@ const PaymentForm: React.FC = () => {
           className="card"
         >
           <div className="flex items-center space-x-2 mb-4">
-            <User size={20} className="text-primary-600" />
+            <UserIcon className="w-5 h-5 text-primary-600" />
             <h3 className="text-lg font-semibold">Datos del Cliente</h3>
           </div>
 
@@ -236,7 +248,7 @@ const PaymentForm: React.FC = () => {
           className="card"
         >
           <div className="flex items-center space-x-2 mb-4">
-            <Truck size={20} className="text-primary-600" />
+            <TruckIcon className="w-5 h-5 text-primary-600" />
             <h3 className="text-lg font-semibold">Dirección de Envío</h3>
           </div>
 

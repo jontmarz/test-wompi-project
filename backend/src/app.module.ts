@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './modules/products/products.module';
-// import { PaymentsModule } from './modules/payments/payments.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import { typeOrmConfig } from './infrastructure/database/typeorm.config';
 import { HealthController } from './health.controller';
 
@@ -14,7 +14,7 @@ import { HealthController } from './health.controller';
     }),
     TypeOrmModule.forRootAsync(typeOrmConfig),
     ProductsModule,
-    // PaymentsModule,
+    PaymentsModule,
   ],
   controllers: [HealthController],
 })

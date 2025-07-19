@@ -6,6 +6,8 @@ export interface Product {
   stock: number
   image: string
   category: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface PaymentData {
@@ -47,4 +49,36 @@ export interface CardValidation {
   isValid: boolean
   cardType: 'visa' | 'mastercard' | 'unknown'
   errors: string[]
+}
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}
+
+// Tipos para Wompi Widget
+export interface WompiConfig {
+  currency: string
+  amountInCents: number
+  reference: string
+  publicKey: string
+  redirectUrl: string
+  customerData: {
+    email: string
+    fullName: string
+    phoneNumber: string
+    phoneNumberPrefix: string
+  }
+  signature?: {
+    integrity: string
+  }
+}
+
+// Declaración global para el Widget de Wompi
+declare global {
+  interface Window {
+    WidgetCheckout: new (config: WompiConfig) => {
+      open: (callback: (response: any) => void) => void
+    }
+  }
 }

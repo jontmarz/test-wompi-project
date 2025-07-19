@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Wompi - Test</title>
+    <script src="https://checkout.wompi.co/widget.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .total {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Integración Wompi</h1>
+    
+    <div class="product">
+        <h3>Smartphone Samsung Galaxy A54</h3>
+        <p>Precio: $850,000 COP</p>
+        <button class="button" onclick="testWompiPayment()">Pagar con Wompi</button>
+    </div>
+
+    <div class="total">
+        Total: $850,000 COP
+    </div>
+
+    <script>
+        async function testWompiPayment() {
+            const environment = 'development';
+            const apiKey = 'pub_stagtest_g2u0HQd3ZMh05hsSgTS2lUV8t3s4mOt7';
+            const integrityKey = 'stagtest_integrity_nAIBuqayW70XpUqJS4qf4STYiISd89Fp';
+            
+            console.log('🚀 Iniciando prueba de Wompi...');
+            console.log('Environment:', environment);
+            console.log('API Key disponible:', !!apiKey);
+            console.log('API Key prefix:', apiKey ? apiKey.substring(0, 15) + '...' : 'NO_DISPONIBLE');
+
+            if (!apiKey) {
+                alert('API key no encontrada');
+                return;
+            }
+
+            // Generar reference único
+            const generateUniqueReference = () => {
+                const timestamp = Date.now();
+                const randomStr = Math.random().toString(36).substr(2, 9);
+                return `test_${timestamp}_${randomStr}`;
+            };
+
+            const reference = generateUniqueReference();
+            const amount = 850000; // $850,000 COP
+            const amountInCents = Math.round(amount * 100);
+            const currency = 'COP';
+
+            console.log('Generated reference:', reference);
+            console.log('Payment details:', { reference, amount, amountInCents });
+
+            try {
+                const config = {
+                    currency,
+                    amountInCents,
+                    reference,
+                    publicKey: apiKey,
+                    redirectUrl: `${window.location.origin}/status`,
+                    customerData: {
+                        email: 'test@ejemplo.com',
+                        fullName: 'Usuario de Prueba',
+                        phoneNumber: '3001234567',
+                        phoneNumberPrefix: '+57'
+                    }
+                };
+
+                console.log('Final Wompi config:', {
+                    ...config,
+                    publicKey: config.publicKey?.substring(0, 20) + '...'
+                });
+
+                if (!window.WidgetCheckout) {
+                    alert('Wompi Widget no disponible. Verifica que el script se haya cargado.');
+                    return;
+                }
+
+                const checkout = new window.WidgetCheckout(config);
+                checkout.open((response) => {
+                    console.log('Wompi transaction response:', response);
+                    if (response.transaction && response.transaction.status === 'APPROVED') {
+                        alert('¡Pago aprobado! Reference: ' + reference);
+                    } else {
+                        alert('Pago no completado. Status: ' + (response.transaction?.status || 'unknown'));
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error procesando el pago:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -17,8 +17,15 @@ const initialState: ProductsState = {
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
-    const response = await productsApi.getProducts()
-    return response.data
+    // console.log('fetchProducts thunk called')
+    try {
+      const response = await productsApi.getProducts()
+      // console.log('API response:', response.data)
+      return response.data.data
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      throw error
+    }
   }
 )
 
@@ -37,6 +44,7 @@ const productsSlice = createSlice({
         state.error = null
       })
       .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
+        // console.log('fetchProducts fulfilled with:', action.payload)
         state.loading = false
         state.items = action.payload
       })

@@ -38,6 +38,8 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - FRONTEND_URL=http://localhost:3000
+    volumes:
+      - ./backend/src:/app/src
 
   frontend:
     build:
@@ -49,6 +51,18 @@ services:
       - backend
     environment:
       - VITE_API_URL=http://localhost:3001/api
+      - VITE_WOMPI_PUBLIC_KEY_TEST=pub_stagtest_g2u0HQd3ZMh05hsSgTS2lUV8t3s4mOt7
+      - VITE_WOMPI_PUBLIC_KEY_PROD=pub_stagint_fjIqRyHmHvmqYgPFCO5nibfrtraL6ixq
+      - VITE_WOMPI_INTEGRITY_KEY_PROD=stagint_integrity_uJUSCc0IrOv1OTsLwBpr7mjX05mCqhcL
+      - VITE_WOMPI_INTEGRITY_KEY_TEST=stagtest_integrity_nAIBuqayW70XpUqJS4qf4STYiISd89Fp
+      - VITE_ENVIRONMENT=production
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.js:/app/vite.config.js
+      - ./frontend/tailwind.config.js:/app/tailwind.config.js
+      - ./frontend/postcss.config.js:/app/postcss.config.js
 
 volumes:
   postgres_data:

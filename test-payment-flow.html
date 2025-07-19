@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Wompi Payment Flow</title>
+    <script src="https://checkout.wompi.co/widget.js"></script>
+</head>
+<body>
+    <h1>Test Wompi Payment Flow</h1>
+    <button onclick="testPayment()">Test Payment with Real Credentials</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testPayment() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing payment with staging credentials...</p>';
+            
+            try {
+                // Configuración de prueba usando las credenciales reales
+                const config = {
+                    currency: 'COP',
+                    amountInCents: 5000000, // $50,000 COP
+                    reference: `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    publicKey: 'pub_stagint_fjIqRyHmHvmqYgPFCO5nibfrtraL6ixq', // Staging key
+                    redirectUrl: `${window.location.origin}/status`,
+                    customerData: {
+                        email: 'test@example.com',
+                        fullName: 'Test User',
+                        phoneNumber: '3001234567',
+                        phoneNumberPrefix: '+57'
+                    }
+                };
+
+                console.log('Testing with config:', {
+                    ...config,
+                    publicKey: config.publicKey.substring(0, 20) + '...'
+                });
+
+                if (!window.WidgetCheckout) {
+                    throw new Error('Wompi Widget not loaded');
+                }
+
+                const checkout = new window.WidgetCheckout(config);
+                checkout.open((response) => {
+                    console.log('Wompi response:', response);
+                    resultDiv.innerHTML = `
+                        <h3>Payment Response:</h3>
+                        <pre>${JSON.stringify(response, null, 2)}</pre>
+                    `;
+                });
+
+                resultDiv.innerHTML = '<p>Wompi widget opened! Check for payment dialog...</p>';
+                
+            } catch (error) {
+                console.error('Payment test error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

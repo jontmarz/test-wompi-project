@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Package, RefreshCw } from 'lucide-react'
+import { CubeIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 
 const StockReturn: React.FC = () => {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ const StockReturn: React.FC = () => {
         className="card text-center"
       >
         <div className="flex justify-center mb-4">
-          <Package size={64} className="text-primary-600" />
+          <CubeIcon className="w-16 h-16 text-primary-600" />
         </div>
         
         <h3 className="text-lg font-semibold mb-2">
@@ -42,7 +42,7 @@ const StockReturn: React.FC = () => {
             onClick={handleReturnRequest}
             className="w-full btn btn-primary flex items-center justify-center space-x-2"
           >
-            <RefreshCw size={20} />
+            <ArrowPathIcon className="w-5 h-5" />
             <span>Solicitar Devolución</span>
           </button>
           

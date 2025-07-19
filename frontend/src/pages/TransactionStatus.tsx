@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { CheckCircle, XCircle, Clock, RefreshCw } from 'lucide-react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
+import { CheckCircleIcon, XCircleIcon, ClockIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useAppSelector, useAppDispatch } from '../hooks/redux'
 import { checkTransactionStatus } from '../store/slices/paymentSlice'
 
@@ -39,13 +41,13 @@ const TransactionStatus: React.FC = () => {
   const getStatusIcon = () => {
     switch (transaction.status) {
       case 'APPROVED':
-        return <CheckCircle size={64} className="text-success-600" />
+        return <CheckCircleIcon className="w-16 h-16 text-success-600" />
       case 'DECLINED':
-        return <XCircle size={64} className="text-error-600" />
+        return <XCircleIcon className="w-16 h-16 text-error-600" />
       case 'PENDING':
-        return <Clock size={64} className="text-warning-600" />
+        return <ClockIcon className="w-16 h-16 text-warning-600" />
       default:
-        return <RefreshCw size={64} className="text-gray-600" />
+        return <ArrowPathIcon className="w-16 h-16 text-gray-600" />
     }
   }
 
