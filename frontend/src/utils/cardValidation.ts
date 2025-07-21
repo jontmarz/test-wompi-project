@@ -1,21 +1,37 @@
 import { CardValidation } from '../types'
 
+export const detectCardType = (cardNumber: string): 'visa' | 'mastercard' | 'unknown' => {
+  const cleaned = cardNumber.replace(/\s+/g, '')
+  
+  if (cleaned.startsWith('4')) {
+    return 'visa'
+  } else if (cleaned.startsWith('5') || cleaned.startsWith('2')) {
+    return 'mastercard'
+  }
+  
+  return 'unknown'
+}
+
 export const validateCard = (cardNumber: string): CardValidation => {
   const cleaned = cardNumber.replace(/\s+/g, '')
   const errors: string[] = []
   
-  // Detectar tipo de tarjeta
-  let cardType: 'visa' | 'mastercard' | 'unknown' = 'unknown'
-  
-  if (cleaned.startsWith('4')) {
-    cardType = 'visa'
-  } else if (cleaned.startsWith('5') || cleaned.startsWith('2')) {
-    cardType = 'mastercard'
+  // Validar que no esté vacío
+  if (!cleaned) {
+    errors.push('Número de tarjeta es requerido')
+    return {
+      isValid: false,
+      cardType: 'unknown',
+      errors,
+    }
   }
+  
+  // Detectar tipo de tarjeta
+  const cardType = detectCardType(cleaned)
   
   // Validar longitud
   if (cleaned.length < 13 || cleaned.length > 19) {
-    errors.push('Número de tarjeta inválido')
+    errors.push('El número debe tener entre 13 y 19 dígitos')
   }
   
   // Validar solo números
@@ -33,6 +49,26 @@ export const validateCard = (cardNumber: string): CardValidation => {
     cardType,
     errors,
   }
+}
+
+export const validateExpiryDate = (expiryDate: string): boolean => {
+  const match = expiryDate.match(/^(\d{2})\/(\d{2})$/)
+  if (!match) return false
+  
+  const month = parseInt(match[1], 10)
+  const year = parseInt(`20${match[2]}`, 10)
+  
+  if (month < 1 || month > 12) return false
+  
+  const now = new Date()
+  const expiry = new Date(year, month - 1)
+  
+  return expiry > now
+}
+
+export const validateCVV = (cvv: string): boolean => {
+  const cleaned = cvv.replace(/\s+/g, '')
+  return /^\d{3,4}$/.test(cleaned)
 }
 
 function luhnCheck(cardNumber: string): boolean {

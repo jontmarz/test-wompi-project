@@ -5,8 +5,8 @@ import { Product } from '../../../infrastructure/database/entities/product.entit
 import { Repository } from 'typeorm'
 
 describe('ProductsService', () => {
-  let service: ProductsService
-  let repository: Repository<Product>
+  let service: ProductsService;
+  let repository: Repository<Product>;
 
   const mockRepository = {
     find: jest.fn(),
@@ -37,19 +37,30 @@ describe('ProductsService', () => {
   describe('findAll', () => {
     it('should return array of products', async () => {
       const mockProducts = [
-        { id: '1', name: 'Product 1', price: 100, stock: 10 },
-        { id: '2', name: 'Product 2', price: 200, stock: 5 },
+        { 
+          id: '1', 
+          name: 'Product 1', 
+          price: 100, 
+          stock: 10,
+          description: 'Test Product',
+          image: 'test.jpg',
+          category: 'electronics',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
       ]
       
       mockRepository.find.mockResolvedValue(mockProducts)
       
       const result = await service.findAll()
       
-      expect(result.isSuccess()).toBe(true)
-      expect(result.getValue()).toEqual({
-        success: true,
-        data: mockProducts,
-      })
+      expect(result.isError()).toBe(false)
+      if (!result.isError()) {
+        expect(result.getValue()).toEqual({
+          success: true,
+          data: mockProducts,
+        })
+      }
     })
 
     it('should handle repository errors', async () => {
@@ -57,7 +68,7 @@ describe('ProductsService', () => {
       
       const result = await service.findAll()
       
-      expect(result.isSuccess()).toBe(false)
+      expect(result.isError()).toBe(true)
     })
   })
 })
